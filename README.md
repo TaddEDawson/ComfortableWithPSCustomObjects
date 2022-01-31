@@ -1,2 +1,2 @@
 # ComfortableWithPSCustomObjects
-Getting Comfortable with using PSCustomObjects
+Getting Comfortable with Custom Objects in PowerShell
