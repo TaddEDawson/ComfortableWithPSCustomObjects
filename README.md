@@ -1,7 +1,9 @@
 # ComfortableWithPSCustomObjects
+
 Getting Comfortable with Custom Objects in PowerShell
 
 ## Outline
+
 1. What are custom objects in PowerShell?
 2. Why use custom objects?
     1. Beginning with the end in mine
@@ -9,7 +11,7 @@ Getting Comfortable with Custom Objects in PowerShell
     3. The Pipeline
     4. "Personnel Inventory" story
 3. Getting information on using custom objects
-    1. https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_type_accelerators?view=powershell-5.1 
+    1. [about_type_accelerators][https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_type_accelerators?view=powershell-5.1]
         1. pscustomobject System.Management.Automation.PSObject
     2. Get-Help about_Objects
         1. Key Points
