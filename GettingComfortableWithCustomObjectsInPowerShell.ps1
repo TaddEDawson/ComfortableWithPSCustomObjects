@@ -11,8 +11,24 @@
 		# Getting information on objects in PowerShell
 		Get-Help about_Objects
 #>
+#region Help
+	Get-Help about_Objects -Detailed
+	Get-Help about_Object_Creation -Detailed
+	Get-Help about_Properties -Detailed
+	Get-Help about_Methods -Detailed
+#endregion Help
 
-Get-Help about_Objects -Detailed
-about_Object_Creation
-about_Properties
-about_Methods
+#region Demo 1
+	# Creating a custom object
+
+	# Inspecting the object
+
+	# Setting property values
+
+	# Adding properties
+#endregion Demo 1
+
+#region Excercise 1
+
+#endregion Excercise 1
+
