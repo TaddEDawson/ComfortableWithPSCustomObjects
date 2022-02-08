@@ -10,10 +10,11 @@ Getting Comfortable with Custom Objects in PowerShell
     4. "Code Review" story
 3. Getting information on using custom objects
     1.  https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_type_accelerators?view=powershell-5.1 
-        2.  pscustomobject	System.Management.Automation.PSObject
-    3. Get-Help about_Objects
+        1.  pscustomobject	System.Management.Automation.PSObject
+    2. Get-Help about_Objects
         1. Key Points 
             1. Objects have TYPES, PROPERTIES, AND METHODS
+    3. Get-Help about_Hash_Tables
     4. Get-Help about_Methods
     5. Get-Help about_Object_Creation
     6. Get-Help about_Properties
