@@ -5,9 +5,9 @@ Getting Comfortable with Custom Objects in PowerShell
 1. What are custom objects in PowerShell?
 2. Why use custom objects?
     1. Beginning with the end in mine
-    2. "Code Review" story
-    3. Packaging
-    4. The Pipeline
+    2. Packaging
+    3. The Pipeline
+    4. "Code Review" story
 3. Getting information on using custom objects
     1.  https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_type_accelerators?view=powershell-5.1 
         2.  pscustomobject	System.Management.Automation.PSObject
@@ -23,3 +23,9 @@ Getting Comfortable with Custom Objects in PowerShell
             1. Get-Help Add-Member
     9. Get-Help Get-Member
 4. Creating our first custom object
+    1. New-Object
+    2. Class and Hashtable
+5. Inspecting our first custom object
+6. Getting property values from our custom object
+7. Setting property values on our custom object
+8. Adding properties to our custom object
