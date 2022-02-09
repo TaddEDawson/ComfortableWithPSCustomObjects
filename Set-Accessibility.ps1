@@ -11,6 +11,7 @@ param
 )
 process
 {
+    Start-Transcript -Path C:\Presentations\ComfortableWithPSCustomObjects\transcript.txt -Append -IncludeInvocationHeader
     $Host.UI.RawUI.WindowTitle = "Comfortable PSCustomObject"
     $Host.UI.RawUI.ForegroundColor = [System.ConsoleColor]::White
     $Host.UI.RawUI.BackgroundColor = [System.ConsoleColor]::Black
