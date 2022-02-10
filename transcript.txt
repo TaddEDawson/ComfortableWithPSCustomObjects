@@ -26,3 +26,1445 @@ PS C:\Users\tadd> Stop-Transcript
 PowerShell transcript end
 End time: 20220208210530
 **********************
+**********************
+PowerShell transcript start
+Start time: 20220209210410
+Username: NORTHAMERICA\tadd
+RunAs User: NORTHAMERICA\tadd
+Configuration Name: 
+Machine: TADD-SURFACEBK2 (Microsoft Windows NT 10.0.22000.0)
+Host Application: C:\Program Files\PowerShell\7\pwsh.dll
+Process ID: 3468
+PSVersion: 7.2.1
+PSEdition: Core
+GitCommitId: 7.2.1
+OS: Microsoft Windows 10.0.22000
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.10032.0, 6.0.0, 6.1.0, 6.2.0, 7.0.0, 7.1.0, 7.2.1
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is C:\Presentations\ComfortableWithPSCustomObjects\transcript.txt
+**********************
+Command start time: 20220209210430
+**********************
+PS C:\Users\tadd> help
+**********************
+Command start time: 20220209210954
+**********************
+PS C:\Users\tadd> cls
+**********************
+Command start time: 20220209211000
+**********************
+PS C:\Users\tadd> Get-Help about_Objects
+
+
+ABOUT OBJECTS
+
+
+Short Description
+
+Provides essential information about objects in PowerShell.
+
+
+Long Description
+
+Every action you take in PowerShell occurs within the context of objects.
+As data moves from one command to the next, it moves as one or more
+identifiable objects. An object, then, is a collection of data that
+represents an item. An object is made up of three types of data: the
+objects type, its methods, and its properties.
+
+
+Types, Methods, and Properties
+
+The object type tells what kind of object it is. For example, an object
+that represents a file is a FileInfo object.
+
+The object methods are actions that you can perform on the object. For
+example, FileInfo objects have a CopyTo method that you can use to copy the
+file.
+
+Object properties store information about the object. For example, FileInfo
+objects have a LastWriteTime property that stores the date and time that
+the file was most recently accessed.
+
+When working with objects, you can use their methods and properties in
+commands to take action and manage data.
+
+
+Objects in Pipelines
+
+When commands are combined in a pipeline, they pass information to each
+other as objects. When the first command runs, it sends one or more objects
+down the pipeline to the second command. The second command receives the
+objects from the first command, processes the objects, and then passes new
+or revised objects to the next command in the pipeline. This continues
+until all commands in the pipeline run.
+
+The following example demonstrates how objects are passed from one command
+to the next:
+
+    Get-ChildItem C: | where { $_.PsIsContainer -eq $false } | Format-List
+
+The first command Get-ChildItem C: returns a file or directory object for
+each item in the root directory of the file system. The file and directory
+objects are passed down the pipeline to the second command.
+
+The second command where { $_.PsIsContainer -eq $false } uses the
+PsIsContainer property of all file system objects to select only files,
+which have a value of False ($false) in their PsIsContainer property.
+Folders, which are containers and, thus, have a value of True ($true) in
+their PsIsContainer property, are not selected.
+
+The second command passes only the file objects to the third command
+Format-List, which displays the file objects in a list.
+
+
+See Also
+
+about_Methods
+
+about_Object_Creation
+
+about_Properties
+
+about_Pipelines
+
+Get-Member
+**********************
+Command start time: 20220209211021
+**********************
+PS C:\Users\tadd> TerminatingError(TabExpansion2): "Cannot bind argument to parameter 'inputScript' because it is an empty string."
+**********************
+Command start time: 20220209211027
+**********************
+PS C:\Users\tadd> Get-Help about_Object_Creation
+
+
+ABOUT OBJECT CREATION
+
+
+Short description
+
+Explains how to create objects in PowerShell.
+
+
+Long description
+
+You can create objects in PowerShell and use the objects that you create in
+commands and scripts.
+
+There are many ways to create objects, this list is not definitive:
+
+-   New-Object: Creates an instance of a .NET Framework object or COM
+    object.
+-   Import-Csv/ ConvertFrom-CSV: Creates custom objects (PSCUSTOMOBJECT)
+    from the items defined as comma separated values.
+-   ConvertFrom-Json: Creates custom objects defined in JavaScript Object
+    Notation (JSON).
+-   ConvertFrom-StringData: Creates custom objects defined as key value
+    pairs.
+-   Add-Type: Allows you to define a class in your PowerShell session that
+    you can instantiate with New-Object.
+-   New-Module: The ASCUSTOMOBJECT parameter creates a custom object you
+    define using script block.
+-   Add-Member: Adds properties to existing objects. You can use Add-Member
+    to create a custom object out of a simple type, like [System.Int32].
+-   Select-Object: Selects properties on an object. You can use
+    Select-Object to create custom and calculated properties on an already
+    instantiated object.
+
+The following additional methods are covered in this article:
+
+-   By calling a type's constructor using a static new() method
+-   By typecasting hash tables of property names and property values
+
+
+Static new() method
+
+All .NET types have a new() method that allows you to construct instances
+more easily. You can also see all the available constructors for a given
+type.
+
+To see the constructors for a type, specify the new method name after the
+type name and press <ENTER>.
+
+    [System.Uri]::new
+
+    OverloadDefinitions
+    -------------------
+    uri new(string uriString)
+    uri new(string uriString, bool dontEscape)
+    uri new(uri baseUri, string relativeUri, bool dontEscape)
+    uri new(string uriString, System.UriKind uriKind)
+    uri new(uri baseUri, string relativeUri)
+    uri new(uri baseUri, uri relativeUri)
+
+Now, you can create a SYSTEM.URI by specifying the appropriate constructor.
+
+    [System.Uri]::new("https://www.bing.com")
+
+    AbsolutePath   : /
+    AbsoluteUri    : https://www.bing.com/
+    LocalPath      : /
+    Authority      : www.bing.com
+    ...
+
+You can use the following sample to determine what .NET types are currently
+loaded for you to instantiate.
+
+    [AppDomain]::CurrentDomain.GetAssemblies() |
+      ForEach-Object {
+        $_.GetExportedTypes() |
+          ForEach-Object { $_.FullName }
+      }
+
+Objects created using the new() method may not have the same properties as
+objects of the same type that are created by PowerShell cmdlets. PowerShell
+cmdlets, providers, and Extended Type System can add extra properties to
+the instance.
+
+For example, the FileSystem provider in PowerShell adds six NOTEPROPERTY
+values to the DIRECTORYINFO object returned by Get-Item.
+
+    $PSDirInfo = Get-Item /
+    $PSDirInfo | Get-Member | Group-Object MemberType | Select-Object Count, Name
+
+    Count Name
+    ----- ----
+        4 CodeProperty
+       13 Property
+        6 NoteProperty
+        1 ScriptProperty
+       18 Method
+
+When you create a DIRECTORYINFO object directly, it does not have those six
+NOTEPROPERTY values.
+
+    $NewDirInfo = [System.IO.DirectoryInfo]::new('/')
+    $NewDirInfo | Get-Member | Group-Object MemberType | Select-Object Count, Name
+
+    Count Name
+    ----- ----
+        4 CodeProperty
+       13 Property
+        1 ScriptProperty
+       18 Method
+
+For more information about the Extended Type System, see
+about_Types.ps1xml.
+
+This feature was added in PowerShell 5.0
+
+
+Create objects from hash tables
+
+You can create an object from a hash table of properties and property
+values.
+
+The syntax is as follows:
+
+    [<class-name>]@{
+      <property-name>=<property-value>
+      <property-name>=<property-value>
+    }
+
+This method works only for classes that have a parameterless constructor.
+The object properties must be public and settable.
+
+This feature was added in PowerShell version 3.0
+
+
+Create custom objects from hash tables
+
+Custom objects are very useful and are easy to create using the hash table
+method. The PSCUSTOMOBJECT class is designed specifically for this purpose.
+
+Custom objects are an excellent way to return customized output from a
+function or script. This is more useful than returning formatted output
+that cannot be reformatted or piped to other commands.
+
+The commands in the Test-Object function set some variable values and then
+use those values to create a custom object. You can see this object in use
+in the example section of the Update-Help cmdlet help topic.
+
+    function Test-Object {
+      $ModuleName = "PSScheduledJob"
+      $HelpCulture = "en-us"
+      $HelpVersion = "3.1.0.0"
+      [PSCustomObject]@{
+        "ModuleName"=$ModuleName
+        "UICulture"=$HelpCulture
+        "Version"=$HelpVersion
+      }
+      $ModuleName = "PSWorkflow"
+      $HelpCulture = "en-us"
+      $HelpVersion = "3.0.0.0"
+      [PSCustomObject]@{
+        "ModuleName"=$ModuleName
+        "UICulture"=$HelpCulture
+        "Version"=$HelpVersion
+      }
+    }
+    Test-Object
+
+The output of this function is a collection of custom objects formatted as
+a table by default.
+
+    ModuleName        UICulture      Version
+    ---------         ---------      -------
+    PSScheduledJob    en-us          3.1.0.0
+    PSWorkflow        en-us          3.0.0.0
+
+Users can manage the properties of the custom objects just as they do with
+standard objects.
+
+    (Test-Object).ModuleName
+
+     PSScheduledJob
+     PSWorkflow
+
+
+Create non-custom objects from hash tables
+
+You can also use hash tables to create objects for non-custom classes. When
+you create an object for a non-custom class, the namespace-qualified type
+name is required, although you may omit any initial SYSTEM namespace
+component.
+
+For example, the following command creates a session option object.
+
+    [System.Management.Automation.Remoting.PSSessionOption]@{
+      IdleTimeout=43200000
+      SkipCnCheck=$True
+    }
+
+The requirements of the hash table feature, especially the parameterless
+constructor requirement, eliminate many existing classes. However, most
+PowerShell _option_ classes are designed to work with this feature, as well
+as other very useful classes, such as the PROCESSSTARTINFO class.
+
+    [System.Diagnostics.ProcessStartInfo]@{
+      CreateNoWindow="$true"
+      Verb="run as"
+    }
+
+    Arguments               :
+    ArgumentList            : {}
+    CreateNoWindow          : True
+    EnvironmentVariables    : {OneDriveConsumer, PROCESSOR_ARCHITECTURE,
+                               CommonProgramFiles(x86), APPDATA...}
+    Environment             : {[OneDriveConsumer, C:\Users\user1\OneDrive],
+                               [PROCESSOR_ARCHITECTURE, AMD64],
+                               [CommonProgramFiles(x86),
+                               C:\Program Files (x86)\Common Files],
+                               [APPDATA, C:\Users\user1\AppData\Roaming]...}
+    RedirectStandardInput   : False
+    RedirectStandardOutput  : False
+    RedirectStandardError   : False
+    ...
+
+You can also use the hash table feature when setting parameter values. For
+example, the value of the SESSIONOPTION parameter of the New-PSSession.
+cmdlet can be a hash table.
+
+    New-PSSession -ComputerName Server01 -SessionOption @{
+      IdleTimeout=43200000
+      SkipCnCheck=$True
+    }
+    Register-ScheduledJob Name Test -FilePath .\Get-Inventory.ps1 -Trigger @{
+      Frequency="Daily"
+      At="15:00"
+    }
+
+
+Generic objects
+
+You can also create generic objects in PowerShell. Generics are classes,
+structures, interfaces, and methods that have placeholders (type
+parameters) for one or more of the types that they store or use.
+
+The following example creates a DICTIONARY object.
+
+    $dict = New-Object 'System.Collections.Generic.Dictionary[String,Int]'
+    $dict.Add("One", 1)
+    $dict
+
+    Key Value
+    --- -----
+    One     1
+
+For more information on Generics, see Generics in .NET.
+
+
+See also
+
+about_Objects
+
+about_Methods
+
+about_Properties
+
+about_Pipelines
+
+about_Types.ps1xml
+**********************
+Command start time: 20220209211422
+**********************
+PS C:\Users\tadd> [ipaddress}
+At line:1 char:10
++ [ipaddress}
++          ~
+Missing ] at end of attribute or type literal.
+
+At line:1 char:11
++ [ipaddress}
++           ~
+Unexpected token '}' in expression or statement.
+
+ParserError:
+Line |
+   1 |  [ipaddress}
+     |           ~
+     | Missing ] at end of attribute or type literal.
+
+**********************
+Command start time: 20220209211426
+**********************
+PS C:\Users\tadd> [ipaddress]
+
+IsPublic IsSerial Name                                     BaseType
+-------- -------- ----                                     --------
+True     False    IPAddress                                System.Object
+
+**********************
+Command start time: 20220209213401
+**********************
+PS C:\Users\tadd> Get-Date | ConvertTo-Json
+"2022-02-09T21:34:01.7981097-05:00"
+**********************
+Command start time: 20220209213416
+**********************
+PS C:\Users\tadd> Get-LocalUser | ConvertTo-Json
+WARNING: Resulting JSON is truncated as serialization has exceeded the set depth of 2.
+[
+  {
+    "AccountExpires": null,
+    "Description": "Built-in account for administering the computer/domain",
+    "Enabled": true,
+    "FullName": "",
+    "PasswordChangeableDate": "2019-09-28T18:12:43.4915874-04:00",
+    "PasswordExpires": null,
+    "UserMayChangePassword": true,
+    "PasswordRequired": true,
+    "PasswordLastSet": "2019-09-27T18:12:43.4915874-04:00",
+    "LastLogon": "2019-11-06T15:06:49.8693463-05:00",
+    "Name": "Administrator",
+    "SID": {
+      "BinaryLength": 28,
+      "AccountDomainSid": "S-1-5-21-43105061-3397880212-179612747",
+      "Value": "S-1-5-21-43105061-3397880212-179612747-500"
+    },
+    "PrincipalSource": 1,
+    "ObjectClass": "User"
+  },
+  {
+    "AccountExpires": null,
+    "Description": "A user account managed by the system.",
+    "Enabled": false,
+    "FullName": "",
+    "PasswordChangeableDate": null,
+    "PasswordExpires": null,
+    "UserMayChangePassword": true,
+    "PasswordRequired": false,
+    "PasswordLastSet": null,
+    "LastLogon": null,
+    "Name": "DefaultAccount",
+    "SID": {
+      "BinaryLength": 28,
+      "AccountDomainSid": "S-1-5-21-43105061-3397880212-179612747",
+      "Value": "S-1-5-21-43105061-3397880212-179612747-503"
+    },
+    "PrincipalSource": 1,
+    "ObjectClass": "User"
+  },
+  {
+    "AccountExpires": null,
+    "Description": "Built-in account for guest access to the computer/domain",
+    "Enabled": false,
+    "FullName": "",
+    "PasswordChangeableDate": null,
+    "PasswordExpires": null,
+    "UserMayChangePassword": false,
+    "PasswordRequired": false,
+    "PasswordLastSet": null,
+    "LastLogon": null,
+    "Name": "Guest",
+    "SID": {
+      "BinaryLength": 28,
+      "AccountDomainSid": "S-1-5-21-43105061-3397880212-179612747",
+      "Value": "S-1-5-21-43105061-3397880212-179612747-501"
+    },
+    "PrincipalSource": 1,
+    "ObjectClass": "User"
+  },
+  {
+    "AccountExpires": null,
+    "Description": "A user account managed and used by the system for Windows Defender Application Guard scenarios.",
+    "Enabled": false,
+    "FullName": "",
+    "PasswordChangeableDate": "2019-04-26T16:46:08.5087303-04:00",
+    "PasswordExpires": null,
+    "UserMayChangePassword": true,
+    "PasswordRequired": true,
+    "PasswordLastSet": "2019-04-25T16:46:08.5087303-04:00",
+    "LastLogon": null,
+    "Name": "WDAGUtilityAccount",
+    "SID": {
+      "BinaryLength": 28,
+      "AccountDomainSid": "S-1-5-21-43105061-3397880212-179612747",
+      "Value": "S-1-5-21-43105061-3397880212-179612747-504"
+    },
+    "PrincipalSource": 1,
+    "ObjectClass": "User"
+  }
+]
+**********************
+Command start time: 20220209213449
+**********************
+PS C:\Users\tadd> Get-LocalUser | ConvertTo-Json | ConvertFrom-Json
+WARNING: Resulting JSON is truncated as serialization has exceeded the set depth of 2.
+
+AccountExpires         : 
+Description            : Built-in account for administering the
+                         computer/domain
+Enabled                : True
+FullName               : 
+PasswordChangeableDate : 9/28/2019 6:12:43 PM
+PasswordExpires        : 
+UserMayChangePassword  : True
+PasswordRequired       : True
+PasswordLastSet        : 9/27/2019 6:12:43 PM
+LastLogon              : 11/6/2019 3:06:49 PM
+Name                   : Administrator
+SID                    : @{BinaryLength=28; AccountDomainSid=S-1-5-21-4310506
+                         1-3397880212-179612747;
+                         Value=S-1-5-21-43105061-3397880212-179612747-500}
+PrincipalSource        : 1
+ObjectClass            : User
+
+AccountExpires         : 
+Description            : A user account managed by the system.
+Enabled                : False
+FullName               : 
+PasswordChangeableDate : 
+PasswordExpires        : 
+UserMayChangePassword  : True
+PasswordRequired       : False
+PasswordLastSet        : 
+LastLogon              : 
+Name                   : DefaultAccount
+SID                    : @{BinaryLength=28; AccountDomainSid=S-1-5-21-4310506
+                         1-3397880212-179612747;
+                         Value=S-1-5-21-43105061-3397880212-179612747-503}
+PrincipalSource        : 1
+ObjectClass            : User
+
+AccountExpires         : 
+Description            : Built-in account for guest access to the
+                         computer/domain
+Enabled                : False
+FullName               : 
+PasswordChangeableDate : 
+PasswordExpires        : 
+UserMayChangePassword  : False
+PasswordRequired       : False
+PasswordLastSet        : 
+LastLogon              : 
+Name                   : Guest
+SID                    : @{BinaryLength=28; AccountDomainSid=S-1-5-21-4310506
+                         1-3397880212-179612747;
+                         Value=S-1-5-21-43105061-3397880212-179612747-501}
+PrincipalSource        : 1
+ObjectClass            : User
+
+AccountExpires         : 
+Description            : A user account managed and used by the system for
+                         Windows Defender Application Guard scenarios.
+Enabled                : False
+FullName               : 
+PasswordChangeableDate : 4/26/2019 4:46:08 PM
+PasswordExpires        : 
+UserMayChangePassword  : True
+PasswordRequired       : True
+PasswordLastSet        : 4/25/2019 4:46:08 PM
+LastLogon              : 
+Name                   : WDAGUtilityAccount
+SID                    : @{BinaryLength=28; AccountDomainSid=S-1-5-21-4310506
+                         1-3397880212-179612747;
+                         Value=S-1-5-21-43105061-3397880212-179612747-504}
+PrincipalSource        : 1
+ObjectClass            : User
+
+
+**********************
+Command start time: 20220209213456
+**********************
+PS C:\Users\tadd> Get-LocalUser | ConvertTo-Json | ConvertFrom-Json | GM
+WARNING: Resulting JSON is truncated as serialization has exceeded the set depth of 2.
+
+   TypeName: System.Management.Automation.PSCustomObject
+
+Name                   MemberType   Definition
+----                   ----------   ----------
+Equals                 Method       bool Equals(System.Object obj)
+GetHashCode            Method       int GetHashCode()
+GetType                Method       type GetType()
+ToString               Method       string ToString()
+AccountExpires         NoteProperty object AccountExpires=null
+Description            NoteProperty string Description=Built-in account for …
+Enabled                NoteProperty bool Enabled=True
+FullName               NoteProperty string FullName=
+LastLogon              NoteProperty datetime LastLogon=11/6/2019 3:06:49 PM
+Name                   NoteProperty string Name=Administrator
+ObjectClass            NoteProperty string ObjectClass=User
+PasswordChangeableDate NoteProperty datetime PasswordChangeableDate=9/28/201…
+PasswordExpires        NoteProperty object PasswordExpires=null
+PasswordLastSet        NoteProperty datetime PasswordLastSet=9/27/2019 6:12:…
+PasswordRequired       NoteProperty bool PasswordRequired=True
+PrincipalSource        NoteProperty long PrincipalSource=1
+SID                    NoteProperty System.Management.Automation.PSCustomObj…
+UserMayChangePassword  NoteProperty bool UserMayChangePassword=True
+
+**********************
+Command start time: 20220209213527
+**********************
+PS C:\Users\tadd> Get-LocalUser | ConvertTo-Json | ConvertFrom-Json -Depth 5 | GM
+WARNING: Resulting JSON is truncated as serialization has exceeded the set depth of 2.
+
+   TypeName: System.Management.Automation.PSCustomObject
+
+Name                   MemberType   Definition
+----                   ----------   ----------
+Equals                 Method       bool Equals(System.Object obj)
+GetHashCode            Method       int GetHashCode()
+GetType                Method       type GetType()
+ToString               Method       string ToString()
+AccountExpires         NoteProperty object AccountExpires=null
+Description            NoteProperty string Description=Built-in account for …
+Enabled                NoteProperty bool Enabled=True
+FullName               NoteProperty string FullName=
+LastLogon              NoteProperty datetime LastLogon=11/6/2019 3:06:49 PM
+Name                   NoteProperty string Name=Administrator
+ObjectClass            NoteProperty string ObjectClass=User
+PasswordChangeableDate NoteProperty datetime PasswordChangeableDate=9/28/201…
+PasswordExpires        NoteProperty object PasswordExpires=null
+PasswordLastSet        NoteProperty datetime PasswordLastSet=9/27/2019 6:12:…
+PasswordRequired       NoteProperty bool PasswordRequired=True
+PrincipalSource        NoteProperty long PrincipalSource=1
+SID                    NoteProperty System.Management.Automation.PSCustomObj…
+UserMayChangePassword  NoteProperty bool UserMayChangePassword=True
+
+**********************
+Command start time: 20220209213543
+**********************
+PS C:\Users\tadd> Get-LocalUser | ConvertTo-Json | ConvertFrom-Json -Depth 5 | GM -Static
+WARNING: Resulting JSON is truncated as serialization has exceeded the set depth of 2.
+
+   TypeName: System.Management.Automation.PSCustomObject
+
+Name            MemberType Definition
+----            ---------- ----------
+Equals          Method     static bool Equals(System.Object objA, System.Obj…
+ReferenceEquals Method     static bool ReferenceEquals(System.Object objA, S…
+
+**********************
+PowerShell transcript end
+End time: 20220209213652
+**********************
+**********************
+PowerShell transcript start
+Start time: 20220209215117
+Username: NORTHAMERICA\tadd
+RunAs User: NORTHAMERICA\tadd
+Configuration Name: 
+Machine: TADD-SURFACEBK2 (Microsoft Windows NT 10.0.22000.0)
+Host Application: C:\Program Files\PowerShell\7\pwsh.dll
+Process ID: 2744
+PSVersion: 7.2.1
+PSEdition: Core
+GitCommitId: 7.2.1
+OS: Microsoft Windows 10.0.22000
+Platform: Win32NT
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.10032.0, 6.0.0, 6.1.0, 6.2.0, 7.0.0, 7.1.0, 7.2.1
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+WSManStackVersion: 3.0
+**********************
+Transcript started, output file is C:\Presentations\ComfortableWithPSCustomObjects\transcript.txt
+**********************
+Command start time: 20220209220011
+**********************
+PS C:\Users\tadd> Get-Help about_Object_Creation
+
+
+ABOUT OBJECT CREATION
+
+
+Short description
+
+Explains how to create objects in PowerShell.
+
+
+Long description
+
+You can create objects in PowerShell and use the objects that you create in
+commands and scripts.
+
+There are many ways to create objects, this list is not definitive:
+
+-   New-Object: Creates an instance of a .NET Framework object or COM
+    object.
+-   Import-Csv/ ConvertFrom-CSV: Creates custom objects (PSCUSTOMOBJECT)
+    from the items defined as comma separated values.
+-   ConvertFrom-Json: Creates custom objects defined in JavaScript Object
+    Notation (JSON).
+-   ConvertFrom-StringData: Creates custom objects defined as key value
+    pairs.
+-   Add-Type: Allows you to define a class in your PowerShell session that
+    you can instantiate with New-Object.
+-   New-Module: The ASCUSTOMOBJECT parameter creates a custom object you
+    define using script block.
+-   Add-Member: Adds properties to existing objects. You can use Add-Member
+    to create a custom object out of a simple type, like [System.Int32].
+-   Select-Object: Selects properties on an object. You can use
+    Select-Object to create custom and calculated properties on an already
+    instantiated object.
+
+The following additional methods are covered in this article:
+
+-   By calling a type's constructor using a static new() method
+-   By typecasting hash tables of property names and property values
+
+
+Static new() method
+
+All .NET types have a new() method that allows you to construct instances
+more easily. You can also see all the available constructors for a given
+type.
+
+To see the constructors for a type, specify the new method name after the
+type name and press <ENTER>.
+
+    [System.Uri]::new
+
+    OverloadDefinitions
+    -------------------
+    uri new(string uriString)
+    uri new(string uriString, bool dontEscape)
+    uri new(uri baseUri, string relativeUri, bool dontEscape)
+    uri new(string uriString, System.UriKind uriKind)
+    uri new(uri baseUri, string relativeUri)
+    uri new(uri baseUri, uri relativeUri)
+
+Now, you can create a SYSTEM.URI by specifying the appropriate constructor.
+
+    [System.Uri]::new("https://www.bing.com")
+
+    AbsolutePath   : /
+    AbsoluteUri    : https://www.bing.com/
+    LocalPath      : /
+    Authority      : www.bing.com
+    ...
+
+You can use the following sample to determine what .NET types are currently
+loaded for you to instantiate.
+
+    [AppDomain]::CurrentDomain.GetAssemblies() |
+      ForEach-Object {
+        $_.GetExportedTypes() |
+          ForEach-Object { $_.FullName }
+      }
+
+Objects created using the new() method may not have the same properties as
+objects of the same type that are created by PowerShell cmdlets. PowerShell
+cmdlets, providers, and Extended Type System can add extra properties to
+the instance.
+
+For example, the FileSystem provider in PowerShell adds six NOTEPROPERTY
+values to the DIRECTORYINFO object returned by Get-Item.
+
+    $PSDirInfo = Get-Item /
+    $PSDirInfo | Get-Member | Group-Object MemberType | Select-Object Count, Name
+
+    Count Name
+    ----- ----
+        4 CodeProperty
+       13 Property
+        6 NoteProperty
+        1 ScriptProperty
+       18 Method
+
+When you create a DIRECTORYINFO object directly, it does not have those six
+NOTEPROPERTY values.
+
+    $NewDirInfo = [System.IO.DirectoryInfo]::new('/')
+    $NewDirInfo | Get-Member | Group-Object MemberType | Select-Object Count, Name
+
+    Count Name
+    ----- ----
+        4 CodeProperty
+       13 Property
+        1 ScriptProperty
+       18 Method
+
+For more information about the Extended Type System, see
+about_Types.ps1xml.
+
+This feature was added in PowerShell 5.0
+
+
+Create objects from hash tables
+
+You can create an object from a hash table of properties and property
+values.
+
+The syntax is as follows:
+
+    [<class-name>]@{
+      <property-name>=<property-value>
+      <property-name>=<property-value>
+    }
+
+This method works only for classes that have a parameterless constructor.
+The object properties must be public and settable.
+
+This feature was added in PowerShell version 3.0
+
+
+Create custom objects from hash tables
+
+Custom objects are very useful and are easy to create using the hash table
+method. The PSCUSTOMOBJECT class is designed specifically for this purpose.
+
+Custom objects are an excellent way to return customized output from a
+function or script. This is more useful than returning formatted output
+that cannot be reformatted or piped to other commands.
+
+The commands in the Test-Object function set some variable values and then
+use those values to create a custom object. You can see this object in use
+in the example section of the Update-Help cmdlet help topic.
+
+    function Test-Object {
+      $ModuleName = "PSScheduledJob"
+      $HelpCulture = "en-us"
+      $HelpVersion = "3.1.0.0"
+      [PSCustomObject]@{
+        "ModuleName"=$ModuleName
+        "UICulture"=$HelpCulture
+        "Version"=$HelpVersion
+      }
+      $ModuleName = "PSWorkflow"
+      $HelpCulture = "en-us"
+      $HelpVersion = "3.0.0.0"
+      [PSCustomObject]@{
+        "ModuleName"=$ModuleName
+        "UICulture"=$HelpCulture
+        "Version"=$HelpVersion
+      }
+    }
+    Test-Object
+
+The output of this function is a collection of custom objects formatted as
+a table by default.
+
+    ModuleName        UICulture      Version
+    ---------         ---------      -------
+    PSScheduledJob    en-us          3.1.0.0
+    PSWorkflow        en-us          3.0.0.0
+
+Users can manage the properties of the custom objects just as they do with
+standard objects.
+
+    (Test-Object).ModuleName
+
+     PSScheduledJob
+     PSWorkflow
+
+
+Create non-custom objects from hash tables
+
+You can also use hash tables to create objects for non-custom classes. When
+you create an object for a non-custom class, the namespace-qualified type
+name is required, although you may omit any initial SYSTEM namespace
+component.
+
+For example, the following command creates a session option object.
+
+    [System.Management.Automation.Remoting.PSSessionOption]@{
+      IdleTimeout=43200000
+      SkipCnCheck=$True
+    }
+
+The requirements of the hash table feature, especially the parameterless
+constructor requirement, eliminate many existing classes. However, most
+PowerShell _option_ classes are designed to work with this feature, as well
+as other very useful classes, such as the PROCESSSTARTINFO class.
+
+    [System.Diagnostics.ProcessStartInfo]@{
+      CreateNoWindow="$true"
+      Verb="run as"
+    }
+
+    Arguments               :
+    ArgumentList            : {}
+    CreateNoWindow          : True
+    EnvironmentVariables    : {OneDriveConsumer, PROCESSOR_ARCHITECTURE,
+                               CommonProgramFiles(x86), APPDATA...}
+    Environment             : {[OneDriveConsumer, C:\Users\user1\OneDrive],
+                               [PROCESSOR_ARCHITECTURE, AMD64],
+                               [CommonProgramFiles(x86),
+                               C:\Program Files (x86)\Common Files],
+                               [APPDATA, C:\Users\user1\AppData\Roaming]...}
+    RedirectStandardInput   : False
+    RedirectStandardOutput  : False
+    RedirectStandardError   : False
+    ...
+
+You can also use the hash table feature when setting parameter values. For
+example, the value of the SESSIONOPTION parameter of the New-PSSession.
+cmdlet can be a hash table.
+
+    New-PSSession -ComputerName Server01 -SessionOption @{
+      IdleTimeout=43200000
+      SkipCnCheck=$True
+    }
+    Register-ScheduledJob Name Test -FilePath .\Get-Inventory.ps1 -Trigger @{
+      Frequency="Daily"
+      At="15:00"
+    }
+
+
+Generic objects
+
+You can also create generic objects in PowerShell. Generics are classes,
+structures, interfaces, and methods that have placeholders (type
+parameters) for one or more of the types that they store or use.
+
+The following example creates a DICTIONARY object.
+
+    $dict = New-Object 'System.Collections.Generic.Dictionary[String,Int]'
+    $dict.Add("One", 1)
+    $dict
+
+    Key Value
+    --- -----
+    One     1
+
+For more information on Generics, see Generics in .NET.
+
+
+See also
+
+about_Objects
+
+about_Methods
+
+about_Properties
+
+about_Pipelines
+
+about_Types.ps1xml
+**********************
+Command start time: 20220209220027
+**********************
+PS C:\Users\tadd> Get-Help about_Methods
+
+
+ABOUT METHODS
+
+
+Short description
+
+Describes how to use methods to perform actions on objects in PowerShell.
+
+
+Long description
+
+PowerShell uses objects to represent the items in data stores or the state
+of the computer. For example, FileInfo objects represent the files in file
+system drives and ProcessInfo objects represent the processes on the
+computer.
+
+Objects have properties, which store data about the object, and methods
+that let you change the object.
+
+A "method" is a set of instructions that specify an action you can perform
+on the object. For example, the FileInfo object includes the CopyTo method
+that copies the file that the FileInfo object represents.
+
+To get the methods of any object, use the Get-Member cmdlet. Use its
+MEMBERTYPE property with a value of "Method". The following command gets
+the methods of process objects.
+
+    Get-Process | Get-Member -MemberType Method
+
+    TypeName: System.Diagnostics.Process
+
+    Name                      MemberType Definition
+    ----                      ---------- ----------
+    BeginErrorReadLine        Method     System.Void BeginErrorReadLine()
+    BeginOutputReadLine       Method     System.Void BeginOutputReadLine()
+    ...
+    Kill                      Method     System.Void Kill()
+    Refresh                   Method     System.Void Refresh()
+    Start                     Method     bool Start()
+    ToString                  Method     string ToString()
+    WaitForExit               Method     bool WaitForExit(int milliseconds), ...
+    WaitForInputIdle          Method     bool WaitForInputIdle(int millisecon...
+
+To perform or "invoke" a method of an object, type a dot (.), the method
+name, and a set of parentheses "()". If the method has arguments, place the
+argument values inside the parentheses. The parentheses are required for
+every method call, even when there are no arguments. If the method takes
+multiple arguments, they should be separated by commas.
+
+For example, the following command invokes the Kill method of processes to
+end the Notepad process on the computer.
+
+    $notepad = Get-Process notepad
+    $notepad.Kill()
+
+This example can be shortened by combining the above statements.
+
+    (Get-Process Notepad).Kill()
+
+The Get-Process command is enclosed in parentheses to ensure that it runs
+before the Kill method is invoked. The Kill method is then invoked on the
+returned Process object.
+
+Another very useful method is the Replace method of strings. The Replace
+method, replaces text within a string. In the example below, the dot (.)
+can be placed immediately after the end quote of the string.
+
+    'this is rocket science'.Replace('rocket', 'rock')
+
+    this is rock science
+
+As shown in the previous examples, you can invoke a method on an object
+that you get by using a command, an object in a variable, or anything that
+results in an object (like a string in quotes).
+
+Starting in PowerShell 4.0, method invocation by using dynamic method names
+is supported.
+
+Learning about methods
+
+To find definitions of the methods of an object, go to help topic for the
+object type and look for its methods page. For example, the following page
+describes the methods of process objects System.Diagnostics.Process.
+
+To determine the arguments of a method, review the method definition, which
+is like the syntax diagram of a PowerShell cmdlet.
+
+A method definition might have one or more method signatures, which are
+like the parameter sets of PowerShell cmdlets. The signatures show all of
+the valid formats of commands to invoke the method.
+
+For example, the CopyTo method of the FileInfo class contains the following
+two method signatures:
+
+        CopyTo(String destFileName)
+        CopyTo(String destFileName, Boolean overwrite)
+
+The first method signature takes the destination file name (and a path).
+The following example uses the first CopyTo method to copy the Final.txt
+file to the C:\Bin directory.
+
+    (Get-ChildItem c:\final.txt).CopyTo("c:\bin\final.txt")
+
+  [!NOTE] Unlike PowerShell's _argument_ mode, object methods execute in
+  _expression_ mode, which is a pass-through to the .NET framework that
+  PowerShell is built on. In _expression_ mode BAREWORD arguments (unquoted
+  strings) are not allowed. You can see this difference when using a the
+  path as a parameter, versus the path as an argument. You can read more
+  about parsing modes in about_Parsing
+
+The second method signature takes a destination file name and a Boolean
+value that determines whether the destination file should be overwritten,
+if it already exists.
+
+The following example uses the second CopyTo method to copy the Final.txt
+file to the C:\Bin directory, and to overwrite existing files.
+
+    (Get-ChildItem c:\final.txt).CopyTo("c:\bin\final.txt", $true)
+
+Methods of Scalar objects and Collections
+
+The methods of one ("scalar") object of a particular type are often
+different from the methods of a collection of objects of the same type.
+
+For example, every process has a Kill method, but a collection of processes
+does not have a Kill method.
+
+Beginning in PowerShell 3.0, PowerShell tries to prevent scripting errors
+that result from the differing methods of scalar objects and collections.
+
+If you submit a collection, but request a method that exists only on single
+("scalar") objects, PowerShell invokes the method on every object in the
+collection.
+
+If the method exists on the individual objects and on the collection, only
+the collection's method is invoked.
+
+This feature also works on properties of scalar objects and collections.
+For more information, see about_Properties.
+
+Examples
+
+The following example runs the KILL method of individual process objects in
+a collection of objects.
+
+The first command starts three instances of the Notepad process.
+Get-Process gets all three instance of the Notepad process and saves them
+in the $p variable.
+
+    Notepad; Notepad; Notepad
+    $p = Get-Process Notepad
+    $p.Count
+
+    3
+
+The next command runs the KILL method on all three processes in the $p
+variable. This command works even though a collection of processes does not
+have a Kill method.
+
+    $p.Kill()
+    Get-Process Notepad
+
+The Get-Process command confirms that the Kill method worked.
+
+    Get-Process : Cannot find a process with the name "notepad". Verify the proc
+    ess name and call the cmdlet again.
+    At line:1 char:12
+    + Get-Process <<<<  notepad
+        + CategoryInfo          : ObjectNotFound: (notepad:String) [Get-Process]
+    , ProcessCommandException
+        + FullyQualifiedErrorId : NoProcessFoundForGivenName,Microsoft.PowerShel
+    l.Commands.GetProcessCommand
+
+This example is functionally equivalent to using the Foreach-Object cmdlet
+to run the method on each object in the collection.
+
+    $p | ForEach-Object {$_.Kill()}
+
+ForEach and Where methods
+
+Beginning in PowerShell 4.0, collection filtering by using a method syntax
+is supported. This allows use of two new methods when dealing with
+collections ForEach and Where.
+
+You can read more about these methods in about_arrays
+
+Calling a specific method when multiple overloads exist
+
+Consider the following scenario when calling .NET methods. If a method
+takes an object but has an overload via an interface taking a more specific
+type, PowerShell chooses the method that accepts the object unless you
+explicitly cast it to that interface.
+
+    Add-Type -TypeDefinition @'
+
+       // Interface
+       public interface IFoo {
+         string Bar(int p);
+       }
+
+       // Type that implements the interface
+       public class Foo : IFoo {
+
+       // Direct member method named 'Bar'
+       public string Bar(object p) { return $"object: {p}"; }
+
+       // *Explicit* implementation of IFoo's 'Bar' method().
+       string IFoo.Bar(int p) {
+           return $"int: {p}";
+       }
+
+    }
+    '@
+
+In this example the less specific object overload of the BAR method was
+chosen.
+
+    [Foo]::new().Bar(1)
+
+    object: 1
+
+In this example we cast the method to the interface IFOO to select the more
+specific overload of the BAR method.
+
+    ([IFoo] [Foo]::new()).Bar(1)
+
+    int: 1
+
+
+See Also
+
+about_Objects
+
+about_Properties
+
+Get-Member
+**********************
+Command start time: 20220209220356
+**********************
+PS C:\Users\tadd> $Me =  [PSCustomObject]@{“First Name” =  “Your  first or given name”“Middle Initial” = “Your Middle Initial”“Last Name” = “Your given or surname”}
+At line:1 char:42
++ … @{“First Name” =  “Your  first or given name”“Middle Initial” = “Your …
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The assignment expression is not valid. The input to an assignment operator must be an object that is able to accept assignments, such as a variable or a property.
+
+At line:1 char:88
++ … iven name”“Middle Initial” = “Your Middle Initial”“Last Name” = “Your …
++                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The assignment expression is not valid. The input to an assignment operator must be an object that is able to accept assignments, such as a variable or a property.
+
+ParserError:
+Line |
+   1 |  … @{“First Name” =  “Your  first or given name”“Middle Initial” = “Your …
+     |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | The assignment expression is not valid. The input to an
+     | assignment operator must be an object that is able to accept
+     | assignments, such as a variable or a property.
+
+**********************
+Command start time: 20220209220409
+**********************
+PS C:\Users\tadd> cls
+**********************
+Command start time: 20220209220519
+**********************
+PS C:\Users\tadd> $Me = [PSCustomObject]@{
+"First Name" = "Tadd"
+"Middle Initial" = "E."
+"Last Name" = "Dawson"
+}
+**********************
+Command start time: 20220209220527
+**********************
+PS C:\Users\tadd> $Me
+
+First Name Middle Initial Last Name
+---------- -------------- ---------
+Tadd       E.             Dawson
+
+**********************
+Command start time: 20220209220543
+**********************
+PS C:\Users\tadd> $Me | Get-Member
+
+   TypeName: System.Management.Automation.PSCustomObject
+
+Name           MemberType   Definition
+----           ----------   ----------
+Equals         Method       bool Equals(System.Object obj)
+GetHashCode    Method       int GetHashCode()
+GetType        Method       type GetType()
+ToString       Method       string ToString()
+First Name     NoteProperty string First Name=Tadd
+Last Name      NoteProperty string Last Name=Dawson
+Middle Initial NoteProperty string Middle Initial=E.
+
+**********************
+Command start time: 20220209220627
+**********************
+PS C:\Users\tadd> Get-Help Add-Member
+
+NAME
+    Add-Member
+
+SYNOPSIS
+    Adds custom properties and methods to an instance of a PowerShell object.
+
+
+SYNTAX
+    Add-Member [-NotePropertyMembers] <System.Collections.IDictionary> [-Force]
+    -InputObject <System.Management.Automation.PSObject> [-PassThru] [-TypeName
+    <System.String>] [<CommonParameters>]
+
+    Add-Member [-NotePropertyName] <System.String> [-NotePropertyValue]
+    <System.Object> [-Force] -InputObject
+    <System.Management.Automation.PSObject> [-PassThru] [-TypeName
+    <System.String>] [<CommonParameters>]
+
+    Add-Member [-MemberType] {AliasProperty | CodeProperty | Property |
+    NoteProperty | ScriptProperty | Properties | PropertySet | Method |
+    CodeMethod | ScriptMethod | Methods | ParameterizedProperty | MemberSet |
+    Event | Dynamic | All} [-Name] <System.String> [[-Value] <System.Object>]
+    [[-SecondValue] <System.Object>] [-Force] -InputObject
+    <System.Management.Automation.PSObject> [-PassThru] [-TypeName
+    <System.String>] [<CommonParameters>]
+
+    Add-Member -InputObject <System.Management.Automation.PSObject> [-PassThru]
+    [-TypeName <System.String>] [<CommonParameters>]
+
+
+DESCRIPTION
+    The `Add-Member` cmdlet lets you add members (properties and methods) to an
+    instance of a PowerShell object. For instance, you can add a NoteProperty
+    member that contains a description of the object or a ScriptMethod member
+    that runs a script to change the object.
+
+    To use `Add-Member`, pipe the object to `Add-Member`, or use the
+    InputObject parameter to specify the object.
+
+    The MemberType parameter indicates the type of member that you want to add.
+    The Name parameter assigns a name to the new member, and the Value
+    parameter sets the value of the member.
+
+    The properties and methods that you add are added only to the particular
+    instance of the object that you specify. `Add-Member` does not change the
+    object type. To create a new object type, use the `Add-Type` cmdlet.
+
+    You can also use the `Export-Clixml` cmdlet to save the instance of the
+    object, including the additional members, in a file. Then you can use the
+    `Import-Clixml` cmdlet to re-create the instance of the object from the
+    information that is stored in the exported file.
+
+    Beginning in Windows PowerShell 3.0, `Add-Member` has new features that
+    make it easier to add note properties to objects. You can use the
+    NotePropertyName and NotePropertyValue parameters to define a note property
+    or use the NotePropertyMembers parameter, which takes a hash table of note
+    property names and values.
+
+    Also, beginning in Windows PowerShell 3.0, the PassThru parameter, which
+    generates an output object, is needed less frequently. `Add-Member` now
+    adds the new members directly to the input object of more types. For more
+    information, see the PassThru parameter description.
+
+
+RELATED LINKS
+    Online Version: https://docs.microsoft.com/powershell/module/microsoft.power
+    shell.utility/add-member?view=powershell-7&WT.mc_id=ps-gethelp
+    Export-Clixml
+    Get-Member
+    Import-Clixml
+    New-Object
+    about_Automatic_Variables
+
+REMARKS
+    To see the examples, type: "Get-Help Add-Member -Examples"
+    For more information, type: "Get-Help Add-Member -Detailed"
+    For technical information, type: "Get-Help Add-Member -Full"
+    For online help, type: "Get-Help Add-Member -Online"
+
+**********************
+Command start time: 20220209220704
+**********************
+PS C:\Users\tadd> $Me
+
+First Name Middle Initial Last Name
+---------- -------------- ---------
+Tadd       E.             Dawson
+
+**********************
+Command start time: 20220209220718
+**********************
+PS C:\Users\tadd> $Me.LikesChocolate
+**********************
+Command start time: 20220209220835
+**********************
+PS C:\Users\tadd> $Me | Add-Member -MemberType NoteProperty -Name LikesChocolate -Value $true -TypeName Boolean
+**********************
+Command start time: 20220209220838
+**********************
+PS C:\Users\tadd> $Me.LikesChocolate
+True
+**********************
+Command start time: 20220209220843
+**********************
+PS C:\Users\tadd> $Me | Get-Member
+
+   TypeName: System.Boolean
+
+Name           MemberType   Definition
+----           ----------   ----------
+Equals         Method       bool Equals(System.Object obj)
+GetHashCode    Method       int GetHashCode()
+GetType        Method       type GetType()
+ToString       Method       string ToString()
+First Name     NoteProperty string First Name=Tadd
+Last Name      NoteProperty string Last Name=Dawson
+LikesChocolate NoteProperty bool LikesChocolate=True
+Middle Initial NoteProperty string Middle Initial=E.
+
+**********************
+Command start time: 20220209220910
+**********************
+PS C:\Users\tadd> $Me.LikesChocolate = $false
+**********************
+Command start time: 20220209220915
+**********************
+PS C:\Users\tadd> $Me.LikesChocolate
+False
+**********************
+Command start time: 20220209220949
+**********************
+PS C:\Users\tadd> $Me | Select-Object "First Name"
+
+First Name
+----------
+Tadd
+
+**********************
+Command start time: 20220209221002
+**********************
+PS C:\Users\tadd> $Me.'First Name'
+Tadd
+**********************
+Command start time: 20220209221027
+**********************
+PS C:\Users\tadd> $Me | Gm -Force -Static
+
+   TypeName: System.Management.Automation.PSCustomObject
+
+Name            MemberType Definition
+----            ---------- ----------
+Equals          Method     static bool Equals(System.Object objA, System.Object…
+ReferenceEquals Method     static bool ReferenceEquals(System.Object objA, Syst…
+
+**********************
+Command start time: 20220209221034
+**********************
+PS C:\Users\tadd> $Me | Gm -Force 
+
+   TypeName: System.Boolean
+
+Name           MemberType   Definition
+----           ----------   ----------
+pstypenames    CodeProperty System.Collections.ObjectModel.Collection`1[[System…
+psadapted      MemberSet    psadapted {ToString, GetType, Equals, GetHashCode}
+psbase         MemberSet    psbase {ToString, GetType, Equals, GetHashCode}
+psextended     MemberSet    psextended {First Name, Middle Initial, Last Name, …
+psobject       MemberSet    psobject {BaseObject, Members, Properties, Methods,…
+Equals         Method       bool Equals(System.Object obj)
+GetHashCode    Method       int GetHashCode()
+GetType        Method       type GetType()
+ToString       Method       string ToString()
+First Name     NoteProperty string First Name=Tadd
+Last Name      NoteProperty string Last Name=Dawson
+LikesChocolate NoteProperty bool LikesChocolate=False
+Middle Initial NoteProperty string Middle Initial=E.
+
+**********************
+Command start time: 20220209221502
+**********************
+PS C:\Users\tadd> $global:?
+**********************
+PowerShell transcript end
+End time: 20220209221502
+**********************
+True

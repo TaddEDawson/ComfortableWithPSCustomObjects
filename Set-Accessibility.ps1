@@ -8,7 +8,7 @@
 param
 (
 
-)
+) #param
 process
 {
     Start-Transcript -Path C:\Presentations\ComfortableWithPSCustomObjects\transcript.txt -Append -IncludeInvocationHeader
@@ -17,5 +17,5 @@ process
     $Host.UI.RawUI.BackgroundColor = [System.ConsoleColor]::Black
 
     $Host.PrivateData.VerboseForegroundColor = [System.ConsoleColor]::DarkYellow
-
-}
+    Get-PSReadLineOption
+} #process
