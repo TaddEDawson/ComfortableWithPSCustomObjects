@@ -1,6 +1,8 @@
 <#
     .SYNOPSIS
         Setting up the terminal to be accessible in presentations
+        GOAL :  Meet WCAG Level AAA. WCAG Level AAA requires a contrast ratio of at least 7:1 for normal text and 4.5:1 for large text.
+                Large text is defined as 14 point (typically 18.66px) and bold or larger, or 18 point (typically 24px) or larger.
     .EXAMPLE
         .\Set-Accessibility.ps1
 #>
