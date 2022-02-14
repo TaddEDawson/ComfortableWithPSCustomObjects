@@ -17,14 +17,29 @@ process
 {
     function prompt
     {
-        ("SPARK ({0}) > " -f (Get-Date).ToString("mm"))
+        $MinutesRemaining = (60-(Get-Date).Minute)
+        Switch ($MinutesRemaining)
+        {
+            {$_ -lt 10} {
+                            $BackgroundColor = "Black"
+                            $ForeGroundColor = "Red"
+                        }
+            {$_ -lt 15} {
+                            $BackgroundColor = "Black"
+                            $ForeGroundColor = "Red"
+                        }
+            default     {
+                            $BackgroundColor = "Black"
+                            $ForeGroundColor = "Red"
+                        }
+        }
+        Write-Host ("SPARK ({0}) > " -f $MinutesRemaining ) -Backgroundcolor $BackgroundColor -Foregroundcolor $ForeGroundColor
     }
-    prompt
-    Start-Transcript -Path C:\Presentations\ComfortableWithPSCustomObjects\transcript.txt -Append -IncludeInvocationHeader
+    Start-Transcript -Path ("C:\Presentations\ComfortableWithPSCustomObjects\{0}_transcript.txt" -f (Get-Date).ToString("yyyyMMddHHmm")) -Append -IncludeInvocationHeader
     $Host.UI.RawUI.WindowTitle = "Comfortable PSCustomObject"
     $Host.UI.RawUI.ForegroundColor = [System.ConsoleColor]::White
     $Host.UI.RawUI.BackgroundColor = [System.ConsoleColor]::Black
 
     $Host.PrivateData.VerboseForegroundColor = [System.ConsoleColor]::DarkYellow
-    Get-PSReadLineOption
+    #Get-PSReadLineOption
 } #process
