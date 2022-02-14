@@ -12,17 +12,29 @@
 #endregion Setup
 
 #region The BIG 3
-    Get-Help
-    Get-Command
-    Get-Member
+    <#
+        Get-Help
+        The `Get-Help` cmdlet displays information about PowerShell concepts and commands, including cmdlets, functions, Common Information Model (CIM) commands, workflows, providers, aliases, and scripts.
+        Get-Command
+        The `Get-Command` cmdlet gets all commands that are installed on the computer, including cmdlets, aliases, functions, filters, scripts, and applications.
+        Get-Member
+        The `Get-Member` cmdlet gets the members, the properties and methods, of objects.
+    #>
 #endregion The BIG 3
 
 #region What is a Custom Object
-    Get-Help about_Objects -ShowWindow
+    Get-Help about_Objects
+    <#
+        Everything we interact with in PowerShell is an Object.
 
+        There are times when we need to create our own custom collection of properties, methods and types.
+    #>
 #endregion What is a Custom Object
 
 #region Why use a Custom Object
+    <#
+        1.
+    #>
 
 #endregion Why use a Custom Object
 
