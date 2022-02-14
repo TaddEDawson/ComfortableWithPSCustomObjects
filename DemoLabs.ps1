@@ -2,6 +2,15 @@
     .SYNOPSIS
         Demo Labs for Getting Comfortable with PowerShell Custom Object.
 #>
+#region Setup
+    Start-Transcript -Path ("C:\Presentations\ComfortableWithPSCustomObjects\{0}_transcript.txt" -f (Get-Date).ToString("yyyyMMddHHmm")) -Append -IncludeInvocationHeader
+    $Host.UI.RawUI.WindowTitle = "Comfortable PSCustomObject"
+    $Host.UI.RawUI.ForegroundColor = [System.ConsoleColor]::White
+    $Host.UI.RawUI.BackgroundColor = [System.ConsoleColor]::Black
+    $Host.PrivateData.VerboseForegroundColor = [System.ConsoleColor]::DarkYellow
+    Start-Process '.\Deck\GettingComfortableWithCustomObjectsInPowerShell.ppsx'
+#endregion Setup
+
 #region The BIG 3
     Get-Help
     Get-Command
