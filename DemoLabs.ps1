@@ -3,10 +3,8 @@
 		Demo Labs for Getting Comfortable with PowerShell Custom Object.
 #>
 #region Setup
+Stop-Transcript
 Start-Transcript -Path ("C:\SPARK\{0}_transcript.txt" -f (Get-Date).ToString("yyyyMMddHHmm")) -Append -IncludeInvocationHeader
-$Host.UI.RawUI.ForegroundColor = [System.ConsoleColor]::White
-$Host.UI.RawUI.BackgroundColor = [System.ConsoleColor]::Black
-$Host.PrivateData.VerboseForegroundColor = [System.ConsoleColor]::DarkYellow
 Start-Process '.\Deck\Comfortable.ppsx'
 #endregion Setup
 
@@ -64,6 +62,8 @@ Get-Help about_Objects
     Available since Windows PowerShell 3
 
     Reference : Everything you wanted to know about PSCustomObject
+    https://docs.microsoft.com/en-us/powershell/scripting/learn/deep-dives/everything-about-pscustomobject?view=powershell-7.2
+
 #>
 #endregion Why use a Custom Object
 
@@ -81,7 +81,9 @@ PSCustomObject object that has a
 property for each field in the JSON
 string."
 #>
-'{"First Name": "Tadd"}' | ConvertFrom-Json | Get-Member
+'{"First Name": "Tadd"}' |
+    ConvertFrom-Json |
+        Get-Member
 
 <#
     New-Object
@@ -106,12 +108,12 @@ Get-Member -InputObject $([System.DateTime]) -Static -Name New |
 
 #region about_Type_Accelerators
 
-Get-Help about_Type_Accelerators -ShowWindow
+Get-Help about_Type_Accelerators
 
 # [Array] for [System.Array]
 $MyNewArray = [Array] 1,2,3
-$MyNewArray | Get-Member
-Get-Member -InputObject $MyNewArray
+$MyNewArray | Get-Member | More
+Get-Member -InputObject $MyNewArray | More
 
 # [ipaddress]  for [System.Net.IPAddress]
 Get-Member -InputObject $([ipaddress]) -Static
@@ -178,7 +180,7 @@ $Me = [PSCustomObject]@{
     "Middle Initial"              = "E."
     "Last Name"                   = "Dawson"
     "Email Address"               = "Tadd@Microsoft.com"
-    Twitter                       = "@drtadd"
+    "Twitter"                      = "@drtadd"
     "Favorite PowerShell Cmdlet"  = "Get-Member"
 }
 
@@ -218,6 +220,7 @@ Get-Member -InputObject $Me
 
 # Add         likesChocolate                = "True" to the custom object
 Get-Help Add-Member -ShowWindow
+Get-Command Add-Member -Syntax
 $Me | Add-Member -Name likesChocolate -Value "True" -MemberType NoteProperty
 
 
@@ -350,6 +353,9 @@ $Processed | Out-GridView -PassThru
 $Processed | ConvertTo-Json
 # Convert the processed items to Json as compressed objects and write to a file
 $Processed | ConvertTo-Json -Compress | Out-File processed.json
+Get-Content processed.json
 # Export the processed items as csv
 $Processed | Export-Csv processed.csv -NoTypeInformation
+Import-Csv .\processed.csv
+Get-Content .\processed.csv
 #endregion "You as a PowerShell Custom Object" Slide 16
